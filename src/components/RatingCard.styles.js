@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-export const CardContainer = styled.div`
+export const CardContainer = styled(motion.div)`
   padding: 2.5em 2em;
   border-radius:2em;
   width: 28em;
@@ -9,6 +9,9 @@ export const CardContainer = styled.div`
   display: flex;
   flex-direction:column;
   justify-content: space-between;
+  /* backface-visibility:hidden; */
+  perspective: 1000px;
+  transform-origin:50% 50%;
   background: var(--dark-blue) linear-gradient(to bottom, rgba(2,2,2,.25) 60%, rgba(2,2,2,.4));
 `;
 
@@ -31,7 +34,7 @@ export const Text = styled.p`
   line-height: 1.75;
 `;
 
-export const IconContainer = styled.div`
+export const IconContainer = styled(motion.div)`
   display: flex;
   width: 3em;
   height: 3em;
@@ -78,13 +81,13 @@ export const RatingButton = styled.button`
 
   `;
 
-export const RatingContainer = styled.div`
+export const RatingContainer = styled(motion.div)`
   display: flex;
   justify-content: space-between;
   /* background:lime; */
 `;
 
-export const RatingMessage = styled.div`
+export const RatingMessage = styled(motion.div)`
   background: hsla(var(--medium-grey-2),16%);
   border-radius: 10em;
   padding: .75em 1.5em;

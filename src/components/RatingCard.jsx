@@ -1,9 +1,40 @@
 import React, { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import { AiFillStar } from "react-icons/ai";
 
 import * as S from "./RatingCard.styles";
 import { ReactComponent as Illustration } from "../assets/images/illustration-thank-you.svg";
+
+const y = -30;
+const scale = 0.75;
+const opacity = 0;
+
+const ratingCardVariants = {
+  from: {
+    opacity,
+    y,
+    scaleX: scale,
+    rotateY: "-90deg",
+  },
+  to: {
+    opacity: 1,
+    scaleX: 1,
+    rotateY: "0deg",
+    y: 0,
+  },
+  leave: {
+    opacity,
+    y,
+    scaleX: scale,
+    rotateY: "90deg",
+  },
+};
+
+const defaultTransition = {
+  duration: 0.23,
+  ease: "easeInOut",
+};
 
 function RatingCard() {
   const [rating, setRating] = useState(null);
@@ -11,7 +42,7 @@ function RatingCard() {
 
   useEffect(() => {
     if (isSubmited) {
-      setTimeout(() => setIsSubmited(false), 10000);
+      setTimeout(() => setIsSubmited(false), 3000);
     }
   }, [isSubmited]);
 
@@ -20,13 +51,20 @@ function RatingCard() {
   };
 
   const handleSubmit = () => {
-    if(rating != null){
+    if (rating != null) {
       setIsSubmited(true);
     }
   };
 
   const FrontCard = (
-    <S.CardContainer>
+    <S.CardContainer
+      variants={ratingCardVariants}
+      initial="from"
+      animate="to"
+      exit="leave"
+      transition={defaultTransition}
+      key="front-card"
+    >
       <S.IconContainer>
         <AiFillStar style={{ fill: "var(--orange)" }} size="1.25em" />
       </S.IconContainer>
@@ -48,12 +86,22 @@ function RatingCard() {
             </S.RatingButton>
           ))}
       </S.RatingContainer>
-      <S.SubmitButton disabled={rating == null} onClick={handleSubmit}>Submit</S.SubmitButton>
+      <S.SubmitButton disabled={rating == null} onClick={handleSubmit}>
+        Submit
+      </S.SubmitButton>
     </S.CardContainer>
   );
 
   const BackCard = (
-    <S.CardContainer style={{ alignItems: "center" }}>
+    <S.CardContainer
+      style={{ alignItems: "center" }}
+      variants={ratingCardVariants}
+      key="back-card"
+      initial="from"
+      animate="to"
+      exit="leave"
+      transition={defaultTransition}
+    >
       <Illustration />
       <S.RatingMessage>You selected {rating} out of 5</S.RatingMessage>
       <S.Title>Thank you!</S.Title>
@@ -64,7 +112,11 @@ function RatingCard() {
     </S.CardContainer>
   );
 
-  return !isSubmited ? FrontCard : BackCard;
+  return (
+    <AnimatePresence exitBeforeEnter={true}>
+      {!isSubmited ? FrontCard : BackCard}
+    </AnimatePresence>
+  );
 }
 
 export default RatingCard;
